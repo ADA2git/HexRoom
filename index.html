@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0620">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Hexroom">
+  <meta name="description" content="Hexroom — Block Blast on a hexagonal grid.">
+  <title>Hexroom</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="safe-probe" aria-hidden="true"></div>
+  <div id="hud">
+    <div class="hud-block left">
+      <div class="hud-label">Score</div>
+      <div id="score" class="hud-value">0</div>
+    </div>
+    <div class="hud-mid">
+      <button type="button" id="palette-btn" aria-label="Choose color palette" aria-haspopup="dialog" aria-expanded="false" aria-controls="palette-sheet">
+        <span class="swatch-icon" aria-hidden="true">
+          <i></i><i></i><i></i><i></i>
+        </span>
+      </button>
+      <div id="streak" class="streak hidden" aria-live="polite">
+        <span class="streak-flame">✦</span>
+        <span id="streak-n">1</span>
+        <span class="streak-x" id="streak-x">1.25×</span>
+      </div>
+    </div>
+    <div class="hud-block right">
+      <div class="hud-label">Best</div>
+      <div id="best" class="hud-value">0</div>
+    </div>
+  </div>
+  <canvas id="game"></canvas>
+  <div id="hint" class="hidden">
+    <div class="hint-card">
+      <div>Drag to place.</div>
+      <div>Tap to rotate.</div>
+    </div>
+  </div>
+  <div id="palette-sheet" class="hidden" role="dialog" aria-modal="true" aria-label="Color palettes">
+    <div id="palette-backdrop" class="palette-backdrop"></div>
+    <div class="palette-card">
+      <div class="palette-kicker">Palette</div>
+      <div id="palette-list"></div>
+    </div>
+  </div>
+  <div id="overlay" class="hidden">
+    <div class="over-card">
+      <div class="over-kicker">Game Over</div>
+      <div id="over-score" class="over-score">0</div>
+      <div id="over-best-wrap" class="over-best">Best <span id="over-best">0</span></div>
+      <div id="new-best" class="new-best hidden">New best</div>
+      <button type="button" id="again">Play Again</button>
+    </div>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>

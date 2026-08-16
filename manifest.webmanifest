@@ -1,0 +1,19 @@
+{
+  "name": "Hexroom",
+  "short_name": "Hexroom",
+  "description": "Hexroom — Block Blast on a hexagonal grid.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#070614",
+  "theme_color": "#0b0620",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
