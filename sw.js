@@ -1,8 +1,10 @@
-const CACHE = "hexroom-v1";
+const CACHE = "hexroom-v3";
 const ASSETS = [
   "./",
   "./index.html",
   "./game.js",
+  "./rooms.js",
+  "./firebase-config.js",
   "./style.css",
   "./manifest.webmanifest",
   "./icon.svg"
@@ -25,6 +27,14 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
   event.respondWith(
-    caches.match(event.request).then((hit) => hit || fetch(event.request))
+    fetch(event.request)
+      .then((res) => {
+        if (res && res.ok && res.type === "basic") {
+          var copy = res.clone();
+          caches.open(CACHE).then((cache) => cache.put(event.request, copy));
+        }
+        return res;
+      })
+      .catch(() => caches.match(event.request))
   );
 });

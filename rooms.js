@@ -45,6 +45,8 @@
   var busy = false;
   var ready = false;
   var bootError = "";
+  var pendingInvite = readInvite();
+  var inviteOpened = false;
 
   function compact(s) {
     return String(s || "").toLowerCase().replace(/[ _]/g, "");
@@ -102,6 +104,120 @@
     return { ok: true, name: name, error: "" };
   }
 
+
+  function readInvite() {
+    try {
+      var params = new URLSearchParams(location.search || "");
+      var q = params.get("room") || params.get("r");
+      if (q) return String(q).trim();
+      var hash = String(location.hash || "").replace(/^#/, "");
+      if (hash.indexOf("room=") === 0) {
+        return decodeURIComponent(hash.slice(5)).trim();
+      }
+    } catch (e) {}
+    return "";
+  }
+
+  function roomShareUrl(room) {
+    var url = new URL(location.href);
+    url.hash = "";
+    url.search = "";
+    if (room && room.id) url.searchParams.set("room", room.id);
+    return url.toString();
+  }
+
+  function shareRoom(room, btn) {
+    if (!room || !room.id) return;
+    var url = roomShareUrl(room);
+    var title = "Join " + (room.name || "this room") + " on Hexroom";
+    var label = btn ? btn.textContent : "";
+    function mark(text) {
+      if (!btn) return;
+      btn.textContent = text;
+      setTimeout(function () { btn.textContent = label || "Share"; }, 1600);
+    }
+    if (navigator.share) {
+      navigator.share({ title: title, text: title, url: url }).then(function () {
+        mark("Shared");
+      }).catch(function (e) {
+        if (e && e.name === "AbortError") return;
+        copyShare(url, mark);
+      });
+      return;
+    }
+    copyShare(url, mark);
+  }
+
+  function copyShare(url, mark) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function () {
+        mark("Copied");
+      }).catch(function () {
+        window.prompt("Copy this link", url);
+      });
+      return;
+    }
+    window.prompt("Copy this link", url);
+  }
+
+  function hardRefresh() {
+    var done = Promise.resolve();
+    if ("serviceWorker" in navigator) {
+      done = navigator.serviceWorker.getRegistrations().then(function (regs) {
+        return Promise.all(regs.map(function (r) { return r.unregister(); }));
+      });
+    }
+    done.then(function () {
+      if (!window.caches) return;
+      return caches.keys().then(function (keys) {
+        return Promise.all(keys.map(function (k) { return caches.delete(k); }));
+      });
+    }).catch(function () {}).then(function () {
+      var url = new URL(location.href);
+      url.searchParams.set("fresh", String(Date.now()));
+      location.replace(url.toString());
+    });
+  }
+
+  function maybeOpenInvite() {
+    if (!pendingInvite || inviteOpened) return;
+    inviteOpened = true;
+    openSheet();
+  }
+
+  async function consumeInvite() {
+    if (!pendingInvite || !db || !user || !profile) return;
+    var key = pendingInvite;
+    pendingInvite = "";
+    openSheet();
+    try {
+      var byId = await roomRef(key).get();
+      if (byId.exists) {
+        await joinRoom(byId.id);
+        return;
+      }
+      var exact = await db.collection("rooms").where("nameLower", "==", key.toLowerCase()).limit(1).get();
+      if (!exact.empty) {
+        await joinRoom(exact.docs[0].id);
+        return;
+      }
+      var list = await searchRooms(key);
+      if (list.length === 1) {
+        await joinRoom(list[0].id);
+        return;
+      }
+      if (list.length > 1) {
+        if (els.search) els.search.value = key;
+        renderSearch(list);
+        setError("Pick a room to join.");
+        return;
+      }
+      setError("Couldn't find that room.");
+    } catch (e) {
+      setError("Couldn't open that invite.");
+    }
+  }
+
   function hasConfig() {
     var c = window.HEXROOM_FIREBASE;
     return !!(c && typeof c === "object" && c.apiKey && c.projectId && c.appId);
@@ -147,7 +263,7 @@
     busy = !!on;
     var buttons = els.card ? els.card.querySelectorAll("button") : [];
     for (var i = 0; i < buttons.length; i++) {
-      if (buttons[i].id === "rooms-btn") continue;
+      if (buttons[i].id === "rooms-btn" || buttons[i].id === "rooms-update") continue;
       buttons[i].disabled = busy;
     }
   }
@@ -337,6 +453,9 @@
     head.appendChild(el("div", "rooms-row-sub", roomMeta(openRoom)));
     els.open.appendChild(head);
     var actions = el("div", "rooms-open-actions");
+    var share = el("button", "rooms-mini", "Share");
+    share.type = "button";
+    share.addEventListener("click", function () { shareRoom(openRoom, share); });
     var leave = el("button", "rooms-mini", "Leave room");
     leave.type = "button";
     leave.addEventListener("click", function () { leaveRoom(openRoom.id); });
@@ -349,6 +468,7 @@
       renderTabs();
       loadLeaderboard();
     });
+    actions.appendChild(share);
     actions.appendChild(leave);
     actions.appendChild(close);
     els.open.appendChild(actions);
@@ -523,6 +643,7 @@
       await refreshMyRooms();
       renderMine();
       loadLeaderboard();
+      await consumeInvite();
     } catch (e) {
       setError("Could not save that name. Try again.");
     } finally {
@@ -863,8 +984,10 @@
           if (profile) {
             return refreshMyRooms().then(function () {
               renderMine();
+              return consumeInvite();
             });
           }
+          maybeOpenInvite();
         }).catch(function () {
           ready = true;
           renderPanel();
@@ -900,6 +1023,7 @@
     els.open = $("rooms-open");
     els.tabMembers = $("rooms-tab-members");
     els.lb = $("rooms-lb");
+    els.update = $("rooms-update");
 
     api.open = openSheet;
     api.close = closeSheet;
@@ -937,6 +1061,12 @@
           e.preventDefault();
           claimUsername();
         }
+      });
+    }
+    if (els.update) {
+      els.update.addEventListener("click", function (e) {
+        e.preventDefault();
+        hardRefresh();
       });
     }
     if (els.createBtn) els.createBtn.addEventListener("click", createRoom);
@@ -978,6 +1108,7 @@
   function start() {
     bind();
     myRooms = loadMyRoomsLocal();
+    if (pendingInvite) maybeOpenInvite();
     if (!hasConfig() || !firebaseReady()) {
       bootError = "Rooms need a Firebase project. Add your web config to firebase-config.js. You can still play offline.";
       ready = true;
