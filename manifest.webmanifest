@@ -1,0 +1,24 @@
+{
+  "name": "Hex Blast",
+  "short_name": "Hex Blast",
+  "description": "Block Blast on a hexagonal grid.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#070614",
+  "theme_color": "#0b0620",
+  "icons": [
+    {
+      "src": "icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

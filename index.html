@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0620">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Hex Blast">
+  <meta name="description" content="Block Blast on a hexagonal grid.">
+  <title>Hex Blast</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="icon" type="image/png" sizes="180x180" href="icon-180.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="safe-probe" aria-hidden="true"></div>
+  <div id="hud">
+    <div class="hud-block left">
+      <div class="hud-label">Score</div>
+      <div id="score" class="hud-value">0</div>
+    </div>
+    <div id="streak" class="streak hidden" aria-live="polite">
+      <span class="streak-flame">✦</span>
+      <span id="streak-n">1</span>
+      <span class="streak-x" id="streak-x">1.25×</span>
+    </div>
+    <div class="hud-block right">
+      <div class="hud-label">Best</div>
+      <div id="best" class="hud-value">0</div>
+    </div>
+  </div>
+  <canvas id="game"></canvas>
+  <div id="hint" class="hidden">
+    <div class="hint-card">
+      <div>Drag to place.</div>
+      <div>Tap to rotate.</div>
+    </div>
+  </div>
+  <div id="overlay" class="hidden">
+    <div class="over-card">
+      <div class="over-kicker">Game Over</div>
+      <div id="over-score" class="over-score">0</div>
+      <div id="over-best-wrap" class="over-best">Best <span id="over-best">0</span></div>
+      <div id="new-best" class="new-best hidden">New best</div>
+      <button type="button" id="again">Play Again</button>
+    </div>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
