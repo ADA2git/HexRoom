@@ -23,11 +23,14 @@
       <div id="score" class="hud-value">0</div>
     </div>
     <div class="hud-mid">
-      <button type="button" id="palette-btn" aria-label="Choose color palette" aria-haspopup="dialog" aria-expanded="false" aria-controls="palette-sheet">
-        <span class="swatch-icon" aria-hidden="true">
-          <i></i><i></i><i></i><i></i>
-        </span>
-      </button>
+      <div class="hud-mid-btns">
+        <button type="button" id="palette-btn" aria-label="Choose color palette" aria-haspopup="dialog" aria-expanded="false" aria-controls="palette-sheet">
+          <span class="swatch-icon" aria-hidden="true">
+            <i></i><i></i><i></i><i></i>
+          </span>
+        </button>
+        <button type="button" id="rooms-btn" aria-label="Rooms" aria-haspopup="dialog" aria-expanded="false" aria-controls="rooms-sheet">Rooms</button>
+      </div>
       <div id="streak" class="streak hidden" aria-live="polite">
         <span class="streak-flame">✦</span>
         <span id="streak-n">1</span>
@@ -53,6 +56,53 @@
       <div id="palette-list"></div>
     </div>
   </div>
+  <div id="rooms-sheet" class="hidden" role="dialog" aria-modal="true" aria-label="Rooms">
+    <div id="rooms-backdrop" class="rooms-backdrop"></div>
+    <div class="rooms-card" id="rooms-card">
+      <div class="rooms-kicker">Rooms</div>
+      <div id="rooms-who" class="rooms-who hidden"></div>
+      <div id="rooms-error" class="rooms-error hidden"></div>
+
+      <div id="rooms-noconfig" class="rooms-panel hidden">
+        <p id="rooms-noconfig-note" class="rooms-note">Rooms need a Firebase project. Add your web config to firebase-config.js. You can still play offline.</p>
+      </div>
+
+      <div id="rooms-loading" class="rooms-panel hidden">
+        <p class="rooms-note">Signing in…</p>
+      </div>
+
+      <div id="rooms-name-form" class="rooms-panel hidden">
+        <p class="rooms-note">Pick a username to join rooms and leaderboards.</p>
+        <label class="rooms-label" for="rooms-name-input">Username</label>
+        <input id="rooms-name-input" class="rooms-input" type="text" maxlength="16" autocomplete="nickname" autocapitalize="off" spellcheck="false" placeholder="3–16 letters or numbers" enterkeyhint="done">
+        <button type="button" id="rooms-name-go" class="rooms-primary">Join</button>
+      </div>
+
+      <div id="rooms-main" class="rooms-panel hidden">
+        <label class="rooms-label" for="rooms-search">Find a room</label>
+        <input id="rooms-search" class="rooms-input" type="search" maxlength="40" placeholder="School, class, friends…" autocomplete="off" autocapitalize="off" spellcheck="false">
+        <div id="rooms-search-results" class="rooms-list"></div>
+
+        <div class="rooms-create-row">
+          <input id="rooms-create-name" class="rooms-input" type="text" maxlength="32" placeholder="New room name" autocomplete="off" autocapitalize="off" spellcheck="false">
+          <button type="button" id="rooms-create-btn" class="rooms-secondary">Create</button>
+        </div>
+
+        <div class="rooms-section">My rooms</div>
+        <div id="rooms-mine" class="rooms-list"></div>
+
+        <div id="rooms-open" class="rooms-open hidden"></div>
+
+        <div class="rooms-section">Leaderboard</div>
+        <div class="rooms-tabs" role="tablist">
+          <button type="button" class="rooms-tab on" data-tab="players" role="tab" aria-selected="true">Players</button>
+          <button type="button" class="rooms-tab" data-tab="rooms" role="tab" aria-selected="false">Rooms</button>
+          <button type="button" class="rooms-tab hidden" data-tab="members" id="rooms-tab-members" role="tab" aria-selected="false">Members</button>
+        </div>
+        <div id="rooms-lb" class="rooms-list"></div>
+      </div>
+    </div>
+  </div>
   <div id="overlay" class="hidden">
     <div class="over-card">
       <div class="over-kicker">Game Over</div>
@@ -62,6 +112,11 @@
       <button type="button" id="again">Play Again</button>
     </div>
   </div>
+  <script src="firebase-config.js"></script>
+  <script src="firebase-app-compat.js"></script>
+  <script src="firebase-auth-compat.js"></script>
+  <script src="firebase-firestore-compat.js"></script>
+  <script src="rooms.js"></script>
   <script src="game.js"></script>
 </body>
 </html>

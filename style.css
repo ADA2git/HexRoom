@@ -61,7 +61,7 @@ html, body {
 }
 
 .hud-block {
-  min-width: 88px;
+  min-width: 72px;
 }
 
 .hud-block.right {
@@ -398,4 +398,376 @@ html, body {
 
 .palette-name {
   letter-spacing: 0.01em;
+}
+
+
+.hud-mid-btns {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+#rooms-btn {
+  pointer-events: auto;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  height: 44px;
+  min-width: 44px;
+  margin: 0;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(232, 196, 255, 0.28);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(192, 132, 252, 0.24), rgba(88, 28, 160, 0.36));
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.22);
+  color: #efe6ff;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+#rooms-btn:active {
+  transform: scale(0.96);
+}
+
+#rooms-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 8;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 12px calc(env(safe-area-inset-bottom, 0px) + 12px);
+  pointer-events: none;
+}
+
+#rooms-sheet.hidden {
+  display: none !important;
+}
+
+.rooms-backdrop {
+  pointer-events: auto;
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 3, 14, 0.52);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.rooms-card {
+  pointer-events: auto;
+  touch-action: auto;
+  position: relative;
+  width: min(400px, 100%);
+  max-height: min(82dvh, 720px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 16px 12px calc(12px + env(safe-area-inset-bottom, 0px));
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(167, 85, 247, 0.28), transparent 55%),
+    linear-gradient(180deg, rgba(28, 20, 56, 0.94) 0%, rgba(17, 10, 36, 0.96) 100%);
+  border: 1px solid rgba(233, 213, 255, 0.2);
+  box-shadow:
+    0 20px 48px rgba(0, 0, 0, 0.48),
+    0 0 32px rgba(139, 92, 246, 0.16);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  animation: rooms-in 0.28s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+@keyframes rooms-in {
+  from { transform: translateY(18px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+.rooms-kicker {
+  padding: 0 8px 6px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #c4b5fd;
+}
+
+.rooms-who {
+  padding: 0 8px 10px;
+  font-size: 13px;
+  font-weight: 650;
+  color: #efe6ff;
+}
+
+.rooms-error {
+  margin: 0 0 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 77, 109, 0.14);
+  border: 1px solid rgba(255, 77, 109, 0.28);
+  color: #ffd0d8;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.rooms-panel {
+  padding: 0 4px;
+}
+
+.rooms-note {
+  margin: 0 4px 12px;
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.4;
+  color: #d8c4ff;
+}
+
+.rooms-label {
+  display: block;
+  margin: 0 4px 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #9b8ec4;
+}
+
+.rooms-input {
+  width: 100%;
+  min-height: 48px;
+  margin: 0 0 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(232, 196, 255, 0.22);
+  background: rgba(8, 6, 20, 0.55);
+  color: #f7f2ff;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 650;
+  touch-action: manipulation;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.rooms-input:focus {
+  outline: none;
+  border-color: rgba(192, 132, 252, 0.55);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.22);
+}
+
+.rooms-input::placeholder {
+  color: #8b7db3;
+}
+
+.rooms-primary,
+.rooms-secondary {
+  display: block;
+  min-height: 48px;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 16px;
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.rooms-primary {
+  width: 100%;
+  background: linear-gradient(180deg, #c084fc 0%, #7c3aed 100%);
+  box-shadow: 0 10px 24px rgba(124, 58, 237, 0.45);
+}
+
+.rooms-secondary {
+  flex-shrink: 0;
+  background: linear-gradient(180deg, rgba(192, 132, 252, 0.42), rgba(124, 58, 237, 0.72));
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.28);
+}
+
+.rooms-primary:active,
+.rooms-secondary:active,
+.rooms-mini:active {
+  transform: scale(0.98);
+}
+
+.rooms-primary:disabled,
+.rooms-secondary:disabled,
+.rooms-mini:disabled {
+  opacity: 0.55;
+}
+
+.rooms-create-row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  margin: 4px 0 8px;
+}
+
+.rooms-create-row .rooms-input {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.rooms-section {
+  margin: 14px 4px 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #9b8ec4;
+}
+
+.rooms-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rooms-empty {
+  padding: 10px 8px;
+  font-size: 13px;
+  font-weight: 650;
+  color: #b8a4e0;
+}
+
+.rooms-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 8px 10px 8px 12px;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.rooms-row-tap {
+  cursor: pointer;
+}
+
+.rooms-row-main {
+  flex: 1;
+  min-width: 0;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.rooms-row-title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #f4efff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rooms-row-sub {
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 650;
+  color: #b8a4e0;
+}
+
+.rooms-row-score {
+  flex-shrink: 0;
+  font-size: 18px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #f7f2ff;
+}
+
+.rooms-rank {
+  width: 22px;
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 800;
+  color: #c4b5fd;
+  text-align: center;
+}
+
+.rooms-mini {
+  flex-shrink: 0;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid rgba(232, 196, 255, 0.24);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(192, 132, 252, 0.26), rgba(88, 28, 160, 0.34));
+  color: #efe6ff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.rooms-mini-ghost {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.rooms-open {
+  margin: 8px 0 4px;
+  padding: 12px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(192, 132, 252, 0.18), rgba(88, 28, 160, 0.22));
+  border: 1px solid rgba(232, 196, 255, 0.24);
+}
+
+.rooms-open-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #f7f2ff;
+}
+
+.rooms-open-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.rooms-tabs {
+  display: flex;
+  gap: 6px;
+  margin: 0 0 10px;
+}
+
+.rooms-tab {
+  flex: 1;
+  min-height: 40px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #c4b5fd;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.rooms-tab.on {
+  background: linear-gradient(180deg, rgba(192, 132, 252, 0.26), rgba(88, 28, 160, 0.32));
+  border-color: rgba(232, 196, 255, 0.32);
+  color: #f7f2ff;
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.18);
 }

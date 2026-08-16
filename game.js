@@ -939,6 +939,9 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
     state.overShown = true;
     const beat = state.score > 0 && state.score >= state.best;
     persistBest();
+    if (window.HexroomRooms && typeof window.HexroomRooms.submitRun === "function") {
+      try { window.HexroomRooms.submitRun(state.score); } catch (err) {}
+    }
     elOverScore.textContent = String(state.score);
     elOverBest.textContent = String(state.best);
     if (beat) {
