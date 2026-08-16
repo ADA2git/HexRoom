@@ -1,7 +1,7 @@
 {
   "name": "Hexroom",
   "short_name": "Hexroom",
-  "description": "Hexroom — Block Blast on a hexagonal grid.",
+  "description": "A hex-grid puzzle. Tap to rotate, drag to place, clear lines with friends.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

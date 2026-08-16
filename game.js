@@ -629,6 +629,12 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
     o.stop(t0 + dur + 0.02);
   }
 
+  function buzz(pattern) {
+    try {
+      if (navigator.vibrate) navigator.vibrate(pattern);
+    } catch (e) {}
+  }
+
   const canvas = document.getElementById("game");
   const ctx = canvas.getContext("2d", { alpha: true, desynchronized: true });
   const elScore = document.getElementById("score");
@@ -1003,6 +1009,10 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
       tone(520, 0.08, "triangle", 0.05, 0);
       tone(720, 0.12, "sine", 0.045, 0.06);
       if (lines.length > 1) tone(880, 0.16, "sine", 0.05, 0.12);
+      if (lines.length >= 4) buzz([18, 40, 18, 40, 32]);
+      else if (lines.length === 3) buzz([16, 30, 26]);
+      else if (lines.length === 2) buzz([14, 24, 20]);
+      else buzz(18);
     } else {
       addFloater(
         boardPixel(cells[0][0], cells[0][1])[0],
